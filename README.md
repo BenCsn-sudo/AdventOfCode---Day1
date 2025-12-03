@@ -1,27 +1,55 @@
-# AdventOfCode---Day1
+# 🎄 Advent of Code - Day 1: Secret Entrance
 
-# 🔐 North Pole Safe Cracker
+![AoC Stars](https://img.shields.io/badge/Stars-2-yellow) ![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
 
-**Résolution d'un puzzle logique : simulation d'un cadran de coffre-fort (0-99). Le script parse une liste de rotations (G/D) et utilise l'arithmétique modulaire pour compter combien de fois le curseur s'arrête sur 0, révélant ainsi le mot de passe caché.**
+Ce dépôt contient ma solution pour le **Jour 1** de l'Advent of Code. Le défi consiste à manipuler un cadran de coffre-fort circulaire pour aider les Elfes à accéder à leurs décorations de Noël.
 
-## 🎄 Contexte
-Les Elfes ont perdu le mot de passe du coffre-fort du Pôle Nord. Pour l'ouvrir, il faut suivre une liste d'instructions de rotation sur un cadran circulaire numéroté de 0 à 99. Le "vrai" mot de passe n'est pas la position finale, mais le nombre de fois où le cadran s'arrête exactement sur la position **0**.
+## 📖 Le Contexte
 
-## ⚙️ Fonctionnement Technique
-Le script Python simule le mouvement du cadran en appliquant des opérations mathématiques sur la position courante :
+Nous sommes devant une entrée secrète au Pôle Nord. Le mot de passe a changé et se trouve dans un coffre-fort sécurisé par un cadran rotatif.
 
-1.  **Parsing** : Lecture du fichier `input.txt` et découpage des instructions (ex: `R15`, `L99`).
-2.  **Arithmétique Modulaire** : Utilisation de l'opérateur modulo (`% 100`) pour gérer la circularité du cadran (0-99).
-    * Rotation Droite (R) : `(pos + n) % 100`
-    * Rotation Gauche (L) : `(pos - n) % 100`
-3.  **Logique** : 
-    * Position initiale : **50**
-    * Incrémentation du compteur de résultat à chaque passage à 0.
+* **Le Cadran :** Un cercle numéroté de `0` à `99`.
+* **Position de départ :** Le cadran pointe initialement sur `50`.
+* **Mouvements :**
+    * `L` (Left) : Tourne vers la gauche (vers les nombres décroissants).
+    * `R` (Right) : Tourne vers la droite (vers les nombres croissants).
+* **Circularité :** Le cadran boucle (après 99 on retourne à 0, et avant 0 on retourne à 99).
 
-## 🚀 Utilisation
+## 🧩 Partie 1 : Le Leurre
 
-1. Assurez-vous d'avoir le fichier de données `input.txt` dans le même dossier.
-2. Lancez le script :
+Le premier document de sécurité suggère que le mot de passe est le nombre de fois où le cadran **s'arrête** exactement sur `0` à la fin d'une rotation.
+
+**Logique :**
+1.  Lire la séquence d'instructions (ex: `L68`, `R48`).
+2.  Mettre à jour la position courante en utilisant l'arithmétique modulaire (`% 100`).
+3.  Incrémenter le compteur si la position **finale** après l'instruction est `0`.
+
+**✅ Ma réponse :** `982`
+
+## 🧩 Partie 2 : La vraie méthode (0x434C49434B)
+
+Un second document révèle que le premier était un leurre. La vraie méthode de vérification compte le nombre de fois où le cadran **pointe sur 0 à n'importe quel moment**, c'est-à-dire :
+* À la fin d'une rotation.
+* PENDANT le mouvement de rotation (chaque "clic" passant par 0).
+
+*Exemple : Si le cadran est à 50 et tourne de R1000, il passera par 0 dix fois.*
+
+**Logique :**
+Il faut calculer combien de fois l'intervalle parcouru traverse la frontière `99 -> 0` (pour R) ou `0 -> 99` (pour L) et ajouter cela au total.
+
+**✅ Ma réponse :** `6106`
+
+## 🛠️ Concepts Techniques
+
+* **Parsing d'input :** Extraction des directions (`L`/`R`) et des distances.
+* **Arithmétique Modulaire :** Gestion d'un tableau circulaire de taille 100.
+    * Formule pour `R` (Droite) : `(position + distance) % 100`
+    * Formule pour `L` (Gauche) : `(position - distance) % 100`
+
+## ▶️ Comment lancer le code
+
+Place ton fichier d'input (`input.txt`) dans le même dossier et lance le script :
 
 ```bash
-python main.py
+# Remplacer par la commande correspondant à ton langage (ex: python main.py, node index.js, go run main.go)
+python solution.py
