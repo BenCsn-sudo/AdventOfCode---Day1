@@ -10,20 +10,24 @@ result = 0
 for move in instructions:
     # On sépare la direction (1er caractère) de la valeur (le reste)
     direction = move[0]      # 'R' ou 'L'
-    valeur = int(move[1:])   # Convertit tout le reste en entier
-    
+    valeur = move[1:]        # On récupère tout le reste (les nombres)
+    unit = len(valeur)-2
+    if unit > 0:
+        result += int(valeur[:-2])
+        valeur = valeur[-2:]
+    valeur = int(valeur)
     if direction == "R":
         # Vers la droite : on ajoute
-        position = position + valeur
-        if position > 99:                       # Si on dépasse l'intervalle supérieur
-            result += 1                         # Alors on est passé par 0
-        position = position % 100               # Et on remet modulo 100 pour etre dans l'intervalle
+        position = (position + valeur)
+        if position > 99:
+            result += 1
+            position %= 100
     elif direction == "L":
         # Vers la gauche : on soustrait et on prend le modulo 100
-        position = position - valeur
-        if position < 0:                        # Si on dépasse l'intervalle inférieur
+        position = (position - valeur)
+        if position < 0:
             result += 1
-        position = position % 100
+            position %= 100
         
     # On vérifie si on est tombé sur 0
     if position == 0:
