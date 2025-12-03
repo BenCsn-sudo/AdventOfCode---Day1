@@ -8,29 +8,29 @@ position = 50
 result = 0
 
 for move in instructions:
-    # On sépare la direction (1er caractère) de la valeur (le reste)
-    direction = move[0]      # 'R' ou 'L'
-    valeur = move[1:]        # On récupère tout le reste (les nombres)
-    unit = len(valeur)-2
-    if unit > 0:
-        result += int(valeur[:-2])
-        valeur = valeur[-2:]
-    valeur = int(valeur)
+    direction = move[0]         # La lettre R ou L
+    valeur = int(move[1:])      # La valeur qui suit la lettre
+
     if direction == "R":
-        # Vers la droite : on ajoute
-        position = (position + valeur)
-        if position > 99:
+        dist_vers_zero = 100 - position                 # Distance pour atteindre 0
+
+        if valeur >= dist_vers_zero:                    # Dans le cas ou on dépasse 0
             result += 1
-            position %= 100
-    elif direction == "L":
-        # Vers la gauche : on soustrait et on prend le modulo 100
-        position = (position - valeur)
-        if position < 0:
-            result += 1
-            position %= 100
+            reste_mouvement = valeur - dist_vers_zero   # Combien de tour encore on peut faire
+            result += reste_mouvement // 100
         
-    # On vérifie si on est tombé sur 0
-    if position == 0:
-        result += 1
+        position = (position + valeur) % 100            # On met la position a jour
+
+    elif direction == "L":
+        dist_vers_zero = position                       # Comme on est dans le négatif la distance à zéro = la position
+        if position == 0:                               
+            dist_vers_zero = 100                        # Si la position est à 0 on est à 100 du prochain et non pas 0
+            
+        if valeur >= dist_vers_zero:
+            result += 1
+            reste_mouvement = valeur - dist_vers_zero
+            result += reste_mouvement // 100
+            
+        position = (position - valeur) % 100
 
 print(f"Le mot de passe est : {result}")
